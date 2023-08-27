@@ -1,0 +1,82 @@
+openapi: 3.0.0
+info:
+  title: Student API
+  version: 1.0.0
+paths:
+  /students:
+    post:
+      summary: Create a new student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentCreateResponse'
+
+  /students/{studentId}:
+    get:
+      summary: Get a student by ID
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetStudentByIdResponse'
+
+components:
+  schemas:
+    StudentId:
+      type: string
+    StudentGrade:
+      type: string
+    StudentCreateRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        grade:
+          $ref: '#/components/schemas/GetStudentByIdResponse'
+        mobile:
+          type: string
+        school:
+          type: string
+    StudentCreateResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/StudentId'
+        name:
+          type: string
+        grade:
+          $ref: '#/components/schemas/StudentGrade'
+        mobile:
+          type: string
+        school:
+          type: string
+    GetStudentByIdResponse:
+      type: object
+      properties:
+        id:
+          $ref: '#/components/schemas/StudentId'
+        name:
+          type: string
+        grade:
+          $ref: '#/components/schemas/StudentGrade'
+        mobile:
+          type: string
+        school:
+          type: string
