@@ -5,6 +5,7 @@ info:
 paths:
   /students:
     post:
+      operationId: createStudent  # Specify the generated method name
       summary: Create a new student
       requestBody:
         required: true
@@ -22,6 +23,7 @@ paths:
 
   /students/{studentId}:
     get:
+      operationId: getStudentById  # Specify the generated method name
       summary: Get a student by ID
       parameters:
         - name: studentId
@@ -49,11 +51,17 @@ components:
         name:
           type: string
         grade:
-          $ref: '#/components/schemas/GetStudentByIdResponse'
+          $ref: '#/components/schemas/StudentGrade'
         mobile:
           type: string
+          pattern: '^\d{10}$'  # the pattern for mobile numbers (10 digits)
         school:
           type: string
+      required:
+        - name
+        - grade
+        - mobile
+        - school
     StudentCreateResponse:
       type: object
       properties:

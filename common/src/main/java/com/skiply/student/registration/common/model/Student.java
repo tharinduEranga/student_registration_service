@@ -18,4 +18,45 @@ public record Student(
         Objects.requireNonNull(mobile);
         Objects.requireNonNull(school);
     }
+
+    public static class Builder {
+        private StudentId id;
+        private String name;
+        private StudentGrade grade;
+        private String mobile;
+        private String school;
+
+        public Builder id(StudentId id) {
+            this.id = id;
+            return this;
+        }
+
+        public Builder name(String name) {
+            this.name = name;
+            return this;
+        }
+
+        public Builder grade(StudentGrade grade) {
+            this.grade = grade;
+            return this;
+        }
+
+        public Builder mobile(String mobile) {
+            this.mobile = mobile;
+            return this;
+        }
+
+        public Builder school(String school) {
+            this.school = school;
+            return this;
+        }
+
+        public Student build() {
+            return new Student(id, name, grade, mobile, school);
+        }
+    }
+
+    public static Builder builder() {
+        return new Builder();
+    }
 }
