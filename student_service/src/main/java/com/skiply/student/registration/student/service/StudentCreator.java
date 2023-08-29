@@ -1,6 +1,7 @@
 package com.skiply.student.registration.student.service;
 
 import com.skiply.student.registration.common.model.Student;
+import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
 import com.skiply.student.registration.common.model.exception.DataAccessException;
 import com.skiply.student.registration.student.mapper.StudentRepositoryModelMapper;
 import com.skiply.student.registration.student.repository.StudentRepository;
@@ -21,12 +22,19 @@ public class StudentCreator {
 
     public Student execute(Student student) {
         try {
+            checkMobileNumber(student.mobile());
             var studentRecord = StudentRepositoryModelMapper.getStudentDataRecord(student);
             studentRecord = studentRepository.save(studentRecord);
             return StudentRepositoryModelMapper.getStudentFromDataRecord(studentRecord);
         } catch (Exception e) {
             LOGGER.error("[StudentCreator] failed to save student: {}", e.getMessage(), e);
             throw new DataAccessException("Failed to save student: %s".formatted(e.getMessage()), e);
+        }
+    }
+
+    private void checkMobileNumber(String mobile) {
+        if (!studentRepository.findByMobile(mobile).isEmpty()) {
+            throw new BusinessRuleViolationException("Mobile number is already registered!");
         }
     }
 }
