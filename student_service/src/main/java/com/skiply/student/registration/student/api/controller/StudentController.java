@@ -1,4 +1,4 @@
-package com.skiply.student.registration.student.controller;
+package com.skiply.student.registration.student.api.controller;
 
 import com.skiply.student.registration.common.model.id.StudentId;
 import com.skiply.student.registration.student.StudentsApi;

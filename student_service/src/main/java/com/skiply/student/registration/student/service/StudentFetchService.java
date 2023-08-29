@@ -26,6 +26,8 @@ public class StudentFetchService {
             var studentRecord = studentRepository.findById(studentId.value())
                     .orElseThrow(() -> new BusinessRuleViolationException("Student not found for the id: " + studentId.value()));
             return StudentRepositoryModelMapper.getStudentFromDataRecord(studentRecord);
+        } catch (BusinessRuleViolationException e) {
+            throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
             LOGGER.error("[StudentCreator] failed to get student by id: {}", e.getMessage(), e);
             throw new DataAccessException("Failed to get student by id: %s".formatted(e.getMessage()), e);
