@@ -28,7 +28,7 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     @ExceptionHandler(value = {BusinessRuleViolationException.class})
     protected ResponseEntity<Object> handleBusinessException(BusinessRuleViolationException ex, WebRequest request) {
         return handleExceptionInternal(ex,
-                getErrorResponse(ex.getCode(), ex.getMessage()),
+                getErrorResponse(HttpStatus.BAD_REQUEST.toString(), ex.getMessage()),
                 new HttpHeaders(), HttpStatus.BAD_REQUEST, request);
     }
 
