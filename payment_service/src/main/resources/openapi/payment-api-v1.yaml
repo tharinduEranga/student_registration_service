@@ -1,0 +1,122 @@
+openapi: 3.0.0
+info:
+  title: Payment API
+  version: 1.0.0
+paths:
+  /payments:
+    post:
+      operationId: initPayment  # Specify the generated method name
+      summary: Initiate a new payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentInitiationRequest'
+      responses:
+        '201':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaymentInitiationResponse'
+  /payments/confirm:
+    post:
+      operationId: confirmPayment  # Specify the generated method name
+      summary: Confirm the payment status
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PaymentConfirmationRequest'
+      responses:
+        '200':
+          description: Success
+
+components:
+  schemas:
+    PaymentId:
+      type: string
+    PaymentInitiationRequest:
+      type: object
+      properties:
+        amount:
+          type: number
+        currency:
+          type: string
+        reference:
+          type: string
+        description:
+          type: string
+        metadata:
+          items:
+            $ref: "#/components/schemas/KeyValuePair"
+          type: "array"
+      required:
+        - amount
+        - currency
+        - reference
+    PaymentInitiationResponse:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    PaymentConfirmationRequest:
+      type: object
+      properties:
+        id:
+          type: string
+        status:
+          type: string
+          enum:
+            - SUCCEEDED
+            - FAILED
+        datetime:
+          type: string
+      required:
+        - amount
+        - currency
+        - reference
+    KeyValuePair:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: object
+      required:
+        - key
+        - value
+
+#Error responses
+    ErrorResponse:
+      description: "An array of detail error codes, and messages, and URLs to documentation to help remediation."
+      type: "object"
+      additionalProperties: false
+      properties:
+        Errors:
+          items:
+            $ref: "#/components/schemas/Error"
+          type: "array"
+          minItems: 1
+      required:
+        - "Errors"
+    Error:
+      type: "object"
+      additionalProperties: false
+      properties:
+        Code:
+          description: "Low level textual error code, e.g., Field.Missing"
+          type: "string"
+        Message:
+          description: "A description of the error that occurred. "
+          type: "string"
+          minLength: 1
+          maxLength: 500
+      required:
+        - "Code"
+        - "Message"
+      minProperties: 1

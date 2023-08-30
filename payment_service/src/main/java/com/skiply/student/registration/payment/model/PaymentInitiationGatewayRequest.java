@@ -9,14 +9,14 @@ import java.util.Objects;
 /**
  * This will be the request used in the payment gateway's payment initiation
  */
-public record PaymentInitiationRequest(
+public record PaymentInitiationGatewayRequest(
         MonetaryAmount amount,
         String reference, //(Payment id from the system and this will be returned to the webhook)
         String description,
         HashMap<String, Object> metaData,
         OffsetDateTime dateTime //(Of the time of initiation in this system)
 ) {
-    public PaymentInitiationRequest {
+    public PaymentInitiationGatewayRequest {
         Objects.requireNonNull(amount);
         Objects.requireNonNull(reference);
         Objects.requireNonNull(dateTime);
