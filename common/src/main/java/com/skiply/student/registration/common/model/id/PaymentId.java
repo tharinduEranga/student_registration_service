@@ -10,4 +10,12 @@ public record PaymentId(
         Objects.requireNonNull(value, "payment id required");
         this.value = UUID.fromString(value).toString(); //It will throw an IllegalArgumentException if the value is not a valid UUID
     }
+
+    public static PaymentId of(String value) {
+        return new PaymentId(value);
+    }
+
+    public static PaymentId random() {
+        return new PaymentId(UUID.randomUUID().toString());
+    }
 }

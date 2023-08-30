@@ -2,26 +2,26 @@ package com.skiply.student.registration.common.model.exception;
 
 import jakarta.annotation.Nullable;
 
-public class DataAccessException extends RuntimeException {
+public class TransientFailure extends RuntimeException {
 
     private final String code;
 
-    public DataAccessException(@Nullable String message) {
+    public TransientFailure(@Nullable String message) {
         super(message);
         this.code = null;
     }
 
-    public DataAccessException(@Nullable String message, @Nullable Throwable cause) {
+    public TransientFailure(@Nullable String message, @Nullable Throwable cause) {
         super(message, cause);
         this.code = null;
     }
 
-    public DataAccessException(@Nullable String code, @Nullable String message) {
+    public TransientFailure(@Nullable String code, @Nullable String message) {
         super(message);
         this.code = code;
     }
 
-    public DataAccessException(@Nullable String code, @Nullable String message, @Nullable Throwable throwable) {
+    public TransientFailure(@Nullable String code, @Nullable String message, @Nullable Throwable throwable) {
         super(message, throwable);
         this.code = code;
     }

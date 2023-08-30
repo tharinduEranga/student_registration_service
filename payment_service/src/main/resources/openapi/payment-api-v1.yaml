@@ -3,7 +3,7 @@ info:
   title: Payment API
   version: 1.0.0
 paths:
-  /payments:
+  /payments-init:
     post:
       operationId: initPayment  # Specify the generated method name
       summary: Initiate a new payment
@@ -20,7 +20,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PaymentInitiationResponse'
-  /payments/confirm:
+  /payments-confirm:
     post:
       operationId: confirmPayment  # Specify the generated method name
       summary: Confirm the payment status
@@ -46,6 +46,8 @@ components:
         currency:
           type: string
         reference:
+          type: string
+        studentRegistrationId:
           type: string
         description:
           type: string
@@ -86,7 +88,7 @@ components:
         key:
           type: string
         value:
-          type: object
+          type: string
       required:
         - key
         - value

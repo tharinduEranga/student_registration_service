@@ -1,4 +1,4 @@
-package com.skiply.student.registration.payment.model;
+package com.skiply.student.registration.payment.externalintegration.model;
 
 
 import javax.money.MonetaryAmount;

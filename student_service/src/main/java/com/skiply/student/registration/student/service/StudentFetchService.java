@@ -2,7 +2,6 @@ package com.skiply.student.registration.student.service;
 
 import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
-import com.skiply.student.registration.common.model.exception.DataAccessException;
 import com.skiply.student.registration.common.model.id.StudentId;
 import com.skiply.student.registration.student.mapper.StudentRepositoryModelMapper;
 import com.skiply.student.registration.student.repository.StudentRepository;
@@ -30,7 +29,7 @@ public class StudentFetchService {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
             LOGGER.error("[StudentCreator] failed to get student by id: {}", e.getMessage(), e);
-            throw new DataAccessException("Failed to get student by id: %s".formatted(e.getMessage()), e);
+            throw new BusinessRuleViolationException("Failed to get student by id: %s".formatted(e.getMessage()), e);
         }
     }
 }

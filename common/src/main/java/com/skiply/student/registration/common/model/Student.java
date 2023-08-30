@@ -1,14 +1,21 @@
 package com.skiply.student.registration.common.model;
 
 import com.skiply.student.registration.common.model.id.StudentId;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 import java.util.Objects;
 
 public record Student(
+        @Nonnull
         StudentId id,
+        @Nonnull
         String name,
+        @Nonnull
         StudentGrade grade,
+        @Nonnull
         String mobile,
+        @Nullable
         String school
 ) {
     public Student {
