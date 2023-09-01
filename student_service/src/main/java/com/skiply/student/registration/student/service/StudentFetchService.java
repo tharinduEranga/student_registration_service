@@ -28,7 +28,7 @@ public class StudentFetchService {
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
-            LOGGER.error("[StudentCreator] failed to get student by id: {}", e.getMessage(), e);
+            LOGGER.error("[StudentFetchService] failed to get student by id: {}", e.getMessage(), e);
             throw new BusinessRuleViolationException("Failed to get student by id: %s".formatted(e.getMessage()), e);
         }
     }

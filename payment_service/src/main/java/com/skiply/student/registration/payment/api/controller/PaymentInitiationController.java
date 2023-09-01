@@ -1,4 +1,4 @@
-package com.skiply.student.registration.payment.controller;
+package com.skiply.student.registration.payment.api.controller;
 
 import com.skiply.student.registration.payment.PaymentsInitApi;
 import com.skiply.student.registration.payment.mapper.PaymentApiModelMapper;

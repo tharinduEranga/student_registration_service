@@ -71,17 +71,19 @@ components:
       properties:
         id:
           type: string
+          description: "Should not be confused with the 'id' in our side, we refer this as 'paymentIdFromGateway'"
+        reference:
+          type: string
+          description: "This is the 'id' of our side which we sent as a reference when initiating"
         status:
           type: string
           enum:
             - SUCCEEDED
             - FAILED
-        datetime:
-          type: string
       required:
-        - amount
-        - currency
+        - id
         - reference
+        - status
     KeyValuePair:
       type: object
       properties:

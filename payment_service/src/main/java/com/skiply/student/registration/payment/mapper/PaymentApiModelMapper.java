@@ -4,6 +4,8 @@ import com.skiply.student.registration.common.model.Payment;
 import com.skiply.student.registration.common.model.PaymentStatus;
 import com.skiply.student.registration.common.model.id.PaymentId;
 import com.skiply.student.registration.payment.model.KeyValuePair;
+import com.skiply.student.registration.payment.model.PaymentConfirmation;
+import com.skiply.student.registration.payment.model.PaymentConfirmationRequest;
 import com.skiply.student.registration.payment.model.PaymentInitiationRequest;
 import org.javamoney.moneta.FastMoney;
 
@@ -27,6 +29,14 @@ public class PaymentApiModelMapper {
                 .description(request.getDescription())
                 .metadata(mapMetaData(request.getMetadata()))
                 .initiatedAt(OffsetDateTime.now())
+                .build();
+    }
+
+    public static PaymentConfirmation getPaymentConfirmationFromRequest(PaymentConfirmationRequest request) {
+        return PaymentConfirmation.builder()
+                .id(PaymentId.of(request.getReference()))
+                .status(PaymentStatus.valueOf(request.getStatus().getValue()))
+                .confirmedAt(OffsetDateTime.now())
                 .build();
     }
 

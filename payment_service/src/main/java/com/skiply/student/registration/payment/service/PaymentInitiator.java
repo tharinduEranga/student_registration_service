@@ -25,11 +25,12 @@ public class PaymentInitiator {
             paymentDataRecord = paymentRepository.save(paymentDataRecord);
             payment = PaymentRepositoryModelMapper.getPaymentFromPaymentDataRecord(paymentDataRecord);
             //TODO: call the gateway and get the id and update the record
+            //TODO: send the payment id to the student service as a payment initiation success/fail event
             return payment.id().value();
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
-            LOGGER.error("[StudentCreator] failed to save payment initiation: {}", e.getMessage(), e);
+            LOGGER.error("[PaymentInitiator] failed to save payment initiation: {}", e.getMessage(), e);
             throw new BusinessRuleViolationException("failed to save payment initiation: %s".formatted(e.getMessage()), e);
         }
     }

@@ -97,6 +97,14 @@ public class PaymentDataRecord {
         return confirmedAt;
     }
 
+    public void setInitiatedAt(OffsetDateTime initiatedAt) {
+        this.initiatedAt = initiatedAt;
+    }
+
+    public void setConfirmedAt(OffsetDateTime confirmedAt) {
+        this.confirmedAt = confirmedAt;
+    }
+
     public static class Builder {
         private String id;
         private BigDecimal amount;
