@@ -10,6 +10,7 @@ import com.skiply.student.registration.payment.model.PaymentInitiationRequest;
 import org.javamoney.moneta.FastMoney;
 
 import java.time.OffsetDateTime;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,6 +42,7 @@ public class PaymentApiModelMapper {
     }
 
     private static Map<String, String> mapMetaData(List<KeyValuePair> keyValuePairs) {
+        if (keyValuePairs == null) return Collections.emptyMap();
         return keyValuePairs
                 .stream()
                 .collect(Collectors.toMap(KeyValuePair::getKey, KeyValuePair::getValue,
