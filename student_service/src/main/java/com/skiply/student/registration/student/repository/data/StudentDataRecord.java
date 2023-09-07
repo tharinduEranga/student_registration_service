@@ -12,17 +12,19 @@ public class StudentDataRecord {
     private String name;
     private String grade;
     private String mobile;
+    private String status;
     private String school;
 
     public StudentDataRecord() {
         // Default constructor
     }
 
-    public StudentDataRecord(String id, String name, String grade, String mobile, String school) {
+    public StudentDataRecord(String id, String name, String grade, String mobile, String status, String school) {
         this.id = id;
         this.name = name;
         this.grade = grade;
         this.mobile = mobile;
+        this.status = status;
         this.school = school;
     }
 
@@ -58,6 +60,10 @@ public class StudentDataRecord {
         this.mobile = mobile;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
     public String getSchool() {
         return school;
     }
@@ -71,6 +77,7 @@ public class StudentDataRecord {
         private String name;
         private String grade;
         private String mobile;
+        private String status;
         private String school;
 
         public Builder id(String id) {
@@ -93,13 +100,18 @@ public class StudentDataRecord {
             return this;
         }
 
+        public Builder status(String status) {
+            this.status = status;
+            return this;
+        }
+
         public Builder school(String school) {
             this.school = school;
             return this;
         }
 
         public StudentDataRecord build() {
-            return new StudentDataRecord(id, name, grade, mobile, school);
+            return new StudentDataRecord(id, name, grade, mobile, status, school);
         }
     }
 

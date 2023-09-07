@@ -75,6 +75,12 @@ components:
           type: string
         school:
           type: string
+        status:
+          type: string
+          enum:
+            - PENDING_REGISTRATION
+            - REGISTERED
+            - UNREGISTERED
     GetStudentByIdResponse:
       type: object
       properties:
@@ -88,6 +94,12 @@ components:
           type: string
         school:
           type: string
+        status:
+          type: string
+          enum:
+            - PENDING_REGISTRATION
+            - REGISTERED
+            - UNREGISTERED
 
 #Error responses
     ErrorResponse:

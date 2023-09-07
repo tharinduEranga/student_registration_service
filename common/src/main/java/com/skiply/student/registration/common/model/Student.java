@@ -15,6 +15,8 @@ public record Student(
         StudentGrade grade,
         @Nonnull
         String mobile,
+        @Nonnull
+        StudentStatus status,
         @Nullable
         String school
 ) {
@@ -23,7 +25,7 @@ public record Student(
         Objects.requireNonNull(name);
         Objects.requireNonNull(grade);
         Objects.requireNonNull(mobile);
-        Objects.requireNonNull(school);
+        Objects.requireNonNull(status);
     }
 
     public static class Builder {
@@ -31,6 +33,7 @@ public record Student(
         private String name;
         private StudentGrade grade;
         private String mobile;
+        private StudentStatus status;
         private String school;
 
         public Builder id(StudentId id) {
@@ -53,13 +56,18 @@ public record Student(
             return this;
         }
 
+        public Builder status(StudentStatus status) {
+            this.status = status;
+            return this;
+        }
+
         public Builder school(String school) {
             this.school = school;
             return this;
         }
 
         public Student build() {
-            return new Student(id, name, grade, mobile, school);
+            return new Student(id, name, grade, mobile, status, school);
         }
     }
 

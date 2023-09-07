@@ -28,12 +28,13 @@ public class PaymentConfirmationService {
             paymentDataRecord = paymentRepository.save(paymentDataRecord);
             return paymentDataRecord.getId();
 
-            //TODO: send the payment id and status to the student service as a payment confirmation success/fail event
-            //TODO: send the information to the reporting service as a payment confirmation success/fail event
+            //TODO: send the payment id and status to the student service as a payment confirmation success event
+            //TODO: send the information to the reporting service as a payment confirmation success event
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
             LOGGER.error("[PaymentConfirmationService] failed to confirm payment: {}", e.getMessage(), e);
+            //TODO: send the payment id and status to the student service as a payment confirmation fail event
             throw new BusinessRuleViolationException("failed to confirm payment: %s".formatted(e.getMessage()), e);
         }
     }

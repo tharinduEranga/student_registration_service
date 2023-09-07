@@ -2,6 +2,7 @@ package com.skiply.student.registration.student.mapper;
 
 import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.StudentGrade;
+import com.skiply.student.registration.common.model.StudentStatus;
 import com.skiply.student.registration.common.model.id.StudentId;
 import com.skiply.student.registration.student.model.GetStudentByIdResponse;
 import com.skiply.student.registration.student.model.StudentCreateRequest;
@@ -18,6 +19,7 @@ public class StudentApiModelMapper {
                 .name(request.getName())
                 .grade(StudentGrade.fromString(request.getGrade()))
                 .mobile(request.getMobile())
+                .status(StudentStatus.PENDING_REGISTRATION)
                 .school(request.getSchool())
                 .build();
     }
@@ -28,6 +30,7 @@ public class StudentApiModelMapper {
                 .name(student.name())
                 .grade(String.valueOf(student.grade().value()))
                 .mobile(student.mobile())
+                .status(StudentCreateResponse.StatusEnum.valueOf(student.status().toString()))
                 .school(student.school());
     }
 
@@ -37,6 +40,7 @@ public class StudentApiModelMapper {
                 .name(student.name())
                 .grade(String.valueOf(student.grade().value()))
                 .mobile(student.mobile())
+                .status(GetStudentByIdResponse.StatusEnum.valueOf(student.status().toString()))
                 .school(student.school());
     }
 }
