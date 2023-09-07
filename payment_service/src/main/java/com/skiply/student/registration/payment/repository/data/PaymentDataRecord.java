@@ -105,6 +105,10 @@ public class PaymentDataRecord {
         this.confirmedAt = confirmedAt;
     }
 
+    public void setPaymentIdFromGateway(String paymentIdFromGateway) {
+        this.paymentIdFromGateway = paymentIdFromGateway;
+    }
+
     public static class Builder {
         private String id;
         private BigDecimal amount;
