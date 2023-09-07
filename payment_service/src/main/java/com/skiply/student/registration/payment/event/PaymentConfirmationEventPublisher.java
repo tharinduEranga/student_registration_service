@@ -1,4 +1,4 @@
-package com.skiply.student.registration.student;
+package com.skiply.student.registration.payment.event;
 
 
 import com.skiply.student.registration.common.model.kafka.PaymentConfirmationEvent;
@@ -8,22 +8,21 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
-public class KafkaProducer {
+public class PaymentConfirmationEventPublisher {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(KafkaProducer.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(PaymentConfirmationEventPublisher.class);
 
-    public static final String TOPIC = "student-created";
+    public static final String TOPIC = "payment-confirmed";
 
     private final KafkaTemplate<String, PaymentConfirmationEvent> kafkaTemplate;
 
-    public KafkaProducer(KafkaTemplate<String, PaymentConfirmationEvent> kafkaTemplate) {
+    public PaymentConfirmationEventPublisher(KafkaTemplate<String, PaymentConfirmationEvent> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendFlightEvent(PaymentConfirmationEvent event) {
-        String key = event.message();
+    public void publish(PaymentConfirmationEvent event) {
+        var key = event.paymentId();
         kafkaTemplate.send(TOPIC, key, event);
         LOGGER.info("Producer produced the message {}", event);
-        // write your handlers and post-processing logic, based on your use case
     }
 }

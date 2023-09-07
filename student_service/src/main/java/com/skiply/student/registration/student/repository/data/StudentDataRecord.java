@@ -72,6 +72,10 @@ public class StudentDataRecord {
         this.school = school;
     }
 
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     public static class Builder {
         private String id;
         private String name;
