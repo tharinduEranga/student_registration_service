@@ -20,28 +20,32 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/GetPaymentReportByPaymentIdResponse'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 components:
   schemas:
-    PaymentId:
-      type: string
     GetPaymentReportByPaymentIdResponse:
       type: object
       properties:
-        amount:
+        transactionDateTime: #payment initiated datetime
+          type: string
+        studentId:
+          type: string
+        studentName:
+          type: string
+        transactionReference: #this is the paymentId
+          type: string
+        maskedCardNo:
+          type: string
+        cardType:
+          type: string
+        transactionAmount:
           type: number
-        currency:
-          type: string
-        reference:
-          type: string
-        studentRegistrationId:
-          type: string
-        description:
-          type: string
-      required:
-        - amount
-        - currency
-        - reference
 
 #Error responses
     ErrorResponse:

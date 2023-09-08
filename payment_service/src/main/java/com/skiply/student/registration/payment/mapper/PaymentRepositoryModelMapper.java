@@ -34,7 +34,7 @@ public class PaymentRepositoryModelMapper {
 
     public static Payment getPaymentFromPaymentDataRecord(PaymentDataRecord record) {
         return Payment.builder()
-                .id(new PaymentId(record.getId()))
+                .id(PaymentId.of(record.getId()))
                 .amount(FastMoney.of(record.getAmount(), record.getCurrency()))
                 .studentRegistrationId(record.getStudentRegistrationId())
                 .paymentIdFromGateway(record.getPaymentIdFromGateway())

@@ -75,6 +75,10 @@ components:
         reference:
           type: string
           description: "This is the 'id' of our side which we sent as a reference when initiating"
+        maskedCardNo:
+          type: string
+        cardType:
+          type: string
         status:
           type: string
           enum:
@@ -84,6 +88,8 @@ components:
         - id
         - reference
         - status
+        - maskedCardNo
+        - cardType
     KeyValuePair:
       type: object
       properties:

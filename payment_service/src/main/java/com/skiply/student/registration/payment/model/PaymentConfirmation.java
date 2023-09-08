@@ -1,5 +1,6 @@
 package com.skiply.student.registration.payment.model;
 
+import com.skiply.student.registration.common.model.CardDetails;
 import com.skiply.student.registration.common.model.PaymentStatus;
 import com.skiply.student.registration.common.model.id.PaymentId;
 import jakarta.annotation.Nonnull;
@@ -13,12 +14,15 @@ public record PaymentConfirmation(
         PaymentId id,
         @Nonnull
         PaymentStatus status,
+        @Nonnull
+        CardDetails cardDetails,
         @Nullable
         OffsetDateTime confirmedAt
 ) {
     public PaymentConfirmation {
         Objects.requireNonNull(id);
         Objects.requireNonNull(status);
+        Objects.requireNonNull(cardDetails);
         Objects.requireNonNull(confirmedAt);
     }
 
@@ -29,6 +33,7 @@ public record PaymentConfirmation(
     public static class Builder {
         private PaymentId id;
         private PaymentStatus status;
+        private CardDetails cardDetails;
         private OffsetDateTime confirmedAt;
 
         public Builder id(PaymentId id) {
@@ -41,6 +46,10 @@ public record PaymentConfirmation(
             return this;
         }
 
+        public Builder cardDetails(CardDetails cardDetails) {
+            this.cardDetails = cardDetails;
+            return this;
+        }
 
         public Builder confirmedAt(OffsetDateTime confirmedAt) {
             this.confirmedAt = confirmedAt;
@@ -48,7 +57,7 @@ public record PaymentConfirmation(
         }
 
         public PaymentConfirmation build() {
-            return new PaymentConfirmation(id, status, confirmedAt);
+            return new PaymentConfirmation(id, status, cardDetails, confirmedAt);
         }
     }
 }

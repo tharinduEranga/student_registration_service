@@ -1,5 +1,6 @@
 package com.skiply.student.registration.payment.mapper;
 
+import com.skiply.student.registration.common.model.CardDetails;
 import com.skiply.student.registration.common.model.Payment;
 import com.skiply.student.registration.common.model.PaymentStatus;
 import com.skiply.student.registration.common.model.id.PaymentId;
@@ -38,6 +39,7 @@ public class PaymentApiModelMapper {
                 .id(PaymentId.of(request.getReference()))
                 .status(PaymentStatus.valueOf(request.getStatus().getValue()))
                 .confirmedAt(OffsetDateTime.now())
+                .cardDetails(CardDetails.of(request.getMaskedCardNo(), request.getCardType()))
                 .build();
     }
 

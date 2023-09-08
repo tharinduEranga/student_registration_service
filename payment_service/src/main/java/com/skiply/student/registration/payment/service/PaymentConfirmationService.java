@@ -2,10 +2,15 @@ package com.skiply.student.registration.payment.service;
 
 import com.skiply.student.registration.common.model.PaymentStatus;
 import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
+import com.skiply.student.registration.common.model.id.StudentId;
 import com.skiply.student.registration.common.model.kafka.PaymentConfirmationEvent;
+import com.skiply.student.registration.common.model.kafka.PaymentConfirmationReportEvent;
 import com.skiply.student.registration.payment.event.PaymentConfirmationEventPublisher;
+import com.skiply.student.registration.payment.event.PaymentConfirmationReportEventPublisher;
 import com.skiply.student.registration.payment.model.PaymentConfirmation;
 import com.skiply.student.registration.payment.repository.PaymentRepository;
+import com.skiply.student.registration.payment.repository.data.PaymentDataRecord;
+import org.javamoney.moneta.FastMoney;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -17,10 +22,12 @@ public class PaymentConfirmationService {
 
     private final PaymentRepository paymentRepository;
     private final PaymentConfirmationEventPublisher paymentConfirmationEventPublisher;
+    private final PaymentConfirmationReportEventPublisher paymentConfirmationReportEventPublisher;
 
-    public PaymentConfirmationService(PaymentRepository paymentRepository, PaymentConfirmationEventPublisher paymentConfirmationEventPublisher) {
+    public PaymentConfirmationService(PaymentRepository paymentRepository, PaymentConfirmationEventPublisher paymentConfirmationEventPublisher, PaymentConfirmationReportEventPublisher paymentConfirmationReportEventPublisher) {
         this.paymentRepository = paymentRepository;
         this.paymentConfirmationEventPublisher = paymentConfirmationEventPublisher;
+        this.paymentConfirmationReportEventPublisher = paymentConfirmationReportEventPublisher;
     }
 
     public String execute(PaymentConfirmation paymentConfirmation) {
@@ -32,13 +39,7 @@ public class PaymentConfirmationService {
             paymentDataRecord.setConfirmedAt(paymentConfirmation.confirmedAt());
             paymentDataRecord = paymentRepository.save(paymentDataRecord);
 
-            // publishes the event to the student service
-            paymentConfirmationEventPublisher.publish(PaymentConfirmationEvent.builder()
-                    .paymentId(paymentConfirmation.id().value())
-                    .status(PaymentStatus.SUCCEEDED)
-                    .studentId(paymentDataRecord.getStudentRegistrationId())
-                    .message("Payment successful!")
-                    .build());
+            publishEvents(paymentConfirmation, paymentDataRecord);
 
             return paymentDataRecord.getId();
 
@@ -50,5 +51,25 @@ public class PaymentConfirmationService {
             //TODO: send the payment id and status to the student service as a payment confirmation fail event
             throw new BusinessRuleViolationException("failed to confirm payment: %s".formatted(e.getMessage()), e);
         }
+    }
+
+    private void publishEvents(final PaymentConfirmation paymentConfirmation, final PaymentDataRecord paymentDataRecord) {
+        // publishes the event to the student service
+        paymentConfirmationEventPublisher.publish(PaymentConfirmationEvent.builder()
+                .paymentId(paymentConfirmation.id())
+                .status(PaymentStatus.SUCCEEDED)
+                .studentId(StudentId.of(paymentDataRecord.getStudentRegistrationId()))
+                .message("Payment successful!")
+                .build());
+
+        // publishes the event to the report service
+        paymentConfirmationReportEventPublisher.publish(PaymentConfirmationReportEvent.builder()
+                .paymentId(paymentConfirmation.id())
+                .amount(paymentDataRecord.getAmount())
+                .currency(paymentDataRecord.getCurrency())
+                .studentRegistrationId(StudentId.of(paymentDataRecord.getStudentRegistrationId()))
+                .cardDetails(paymentConfirmation.cardDetails())
+                .datetime(paymentConfirmation.confirmedAt())
+                .build());
     }
 }

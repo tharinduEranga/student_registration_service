@@ -17,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.OffsetDateTime;
+import java.util.UUID;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -46,7 +47,7 @@ class PaymentConfirmWebhookTest {
                 .id(PaymentId.random())
                 .amount(FastMoney.of(100, "AED"))
                 .initiatedAt(OffsetDateTime.now())
-                .studentRegistrationId("123456")
+                .studentRegistrationId(UUID.randomUUID().toString())
                 .status(PaymentStatus.PENDING)
                 .build()
         );
@@ -56,7 +57,9 @@ class PaymentConfirmWebhookTest {
                                 {
                                     "id": "21212",
                                     "reference": "%s",
-                                    "status": "SUCCEEDED"
+                                    "status": "SUCCEEDED",
+                                    "maskedCardNo": "3244*********8989",
+                                    "cardType": "VISA"
                                 }
                                 """.formatted(paymentId))
                 )
@@ -72,7 +75,9 @@ class PaymentConfirmWebhookTest {
                                 {
                                     "id": "21212",
                                     "reference": "27f2db09-e374-45b6-8a24-2a2a891532b5",
-                                    "status": "SUCCEEDED"
+                                    "status": "SUCCEEDED",
+                                    "maskedCardNo": "3244*********8989",
+                                    "cardType": "VISA"
                                 }
                                 """)
                 )

@@ -22,7 +22,7 @@ public class PaymentConfirmationEventPublisher {
 
     public void publish(PaymentConfirmationEvent event) {
         var key = event.paymentId();
-        kafkaTemplate.send(TOPIC, key, event);
+        kafkaTemplate.send(TOPIC, key.value(), event);
         LOGGER.info("Producer produced the message {}", event);
     }
 }
