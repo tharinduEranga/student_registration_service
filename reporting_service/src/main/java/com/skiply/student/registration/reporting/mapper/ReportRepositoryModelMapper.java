@@ -14,7 +14,7 @@ public class ReportRepositoryModelMapper {
     private ReportRepositoryModelMapper() {
     }
 
-    public static ReportRecord getPaymentDataRecordFromPayment(Report report) {
+    public static ReportRecord getReportDataRecordFromReport(Report report) {
         return ReportRecord.builder()
                 .id(report.id().value())
                 .amount(report.amount().getNumber().numberValue(BigDecimal.class))
@@ -28,7 +28,7 @@ public class ReportRepositoryModelMapper {
                 .build();
     }
 
-    public static Report getPaymentFromPaymentDataRecord(ReportRecord record) {
+    public static Report getReportFromReportDataRecord(ReportRecord record) {
         return Report.builder()
                 .id(ReportId.of(record.getId()))
                 .amount(FastMoney.of(record.getAmount(), record.getCurrency()))

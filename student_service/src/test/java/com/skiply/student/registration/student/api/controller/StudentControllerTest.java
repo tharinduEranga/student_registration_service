@@ -2,6 +2,7 @@ package com.skiply.student.registration.student.api.controller;
 
 import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.StudentGrade;
+import com.skiply.student.registration.common.model.StudentStatus;
 import com.skiply.student.registration.common.model.id.StudentId;
 import com.skiply.student.registration.student.service.StudentCreator;
 import org.junit.jupiter.api.AfterEach;
@@ -23,7 +24,6 @@ import java.util.UUID;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@Disabled //because of the feign client calls, which needs to be mocked using a mock web server.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 class StudentControllerTest {
@@ -42,6 +42,7 @@ class StudentControllerTest {
     void tearDown() {
     }
 
+    @Disabled("because of the feign client calls, which needs to be mocked using a mock web server.")
     @Test
     @DisplayName("GIVEN valid student data WHEN call create student api THEN student create success response is returned")
     void createStudentSuccessTest() throws Exception {
@@ -63,10 +64,12 @@ class StudentControllerTest {
                             "name": "John Doe",
                             "grade": "2",
                             "mobile": "%s",
-                            "school": "ABC School"
+                            "school": "ABC School",
+                            "status": "PENDING_REGISTRATION"
                         }
                         """.formatted(mobile), false))
-                .andExpect(jsonPath("$.id").isNotEmpty()); //because the id is dynamic
+                .andExpect(jsonPath("$.id").isNotEmpty()) //because the id is dynamic
+                .andExpect(jsonPath("$.paymentId").isNotEmpty()); //because the payment id is dynamic
     }
 
     @Test
@@ -79,6 +82,7 @@ class StudentControllerTest {
                 .grade(StudentGrade.of(1))
                 .mobile(mobile)
                 .school("XYZ School")
+                .status(StudentStatus.PENDING_REGISTRATION)
                 .build()
         );
         mockMvc.perform(MockMvcRequestBuilders.post("/students")
@@ -116,6 +120,7 @@ class StudentControllerTest {
                 .grade(StudentGrade.of(1))
                 .mobile(mobile)
                 .school("XYZ School")
+                .status(StudentStatus.PENDING_REGISTRATION)
                 .build()
         );
         mockMvc.perform(MockMvcRequestBuilders.get("/students/%s".formatted(studentId))
@@ -128,7 +133,8 @@ class StudentControllerTest {
                             "name": "Tharindu Eranga",
                             "grade": "1",
                             "mobile": "%s",
-                            "school": "XYZ School"
+                            "school": "XYZ School",
+                            "status": "PENDING_REGISTRATION"
                         }
                         """.formatted(studentId, mobile), true));
     }

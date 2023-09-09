@@ -22,9 +22,9 @@ public class CreateReportService {
     @Transactional
     public String execute(Report report) {
         try {
-            var reportRecord = ReportRepositoryModelMapper.getPaymentDataRecordFromPayment(report);
+            var reportRecord = ReportRepositoryModelMapper.getReportDataRecordFromReport(report);
             reportRecord = reportRepository.save(reportRecord);
-            return ReportRepositoryModelMapper.getPaymentFromPaymentDataRecord(reportRecord)
+            return ReportRepositoryModelMapper.getReportFromReportDataRecord(reportRecord)
                     .id().value();
         } catch (Exception e) {
             LOGGER.error("Failed to save report: {}", e.getMessage(), e);

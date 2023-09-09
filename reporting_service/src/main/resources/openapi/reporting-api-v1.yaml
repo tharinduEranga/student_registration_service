@@ -4,7 +4,7 @@ info:
   version: 1.0.0
 paths:
   /reports/{paymentId}:
-    post:
+    get:
       operationId: getPaymentReport  # Specify the generated method name
       summary: Get the report for a payment
       parameters:

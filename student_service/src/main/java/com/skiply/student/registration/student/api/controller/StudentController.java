@@ -29,17 +29,17 @@ public class StudentController implements StudentsApi {
     @Override
     public ResponseEntity<StudentCreateResponse> createStudent(StudentCreateRequest studentCreateRequest) {
         LOGGER.info("Create student request: {}", studentCreateRequest);
-        var student = StudentApiModelMapper.getStudentFromCreateRequest(studentCreateRequest);
-        student = studentCreator.execute(student);
+        final var student = StudentApiModelMapper.getStudentFromCreateRequest(studentCreateRequest);
+        final var studentCreatedData = studentCreator.execute(student);
         LOGGER.info("Create student response: {}", studentCreateRequest);
-        return new ResponseEntity<>(StudentApiModelMapper.getCreateResponseFromStudent(student), HttpStatus.CREATED);
+        return new ResponseEntity<>(StudentApiModelMapper.getCreateResponseFromStudent(studentCreatedData), HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<GetStudentByIdResponse> getStudentById(String studentId) {
         LOGGER.info("Get student by id request: {}", studentId);
-        var student = studentFetchService.getStudentById(StudentId.of(studentId));
+        final var student = studentFetchService.getStudentById(StudentId.of(studentId));
         LOGGER.info("Get student response: {}", student);
-        return new ResponseEntity<>(StudentApiModelMapper.getStudentResponseFromStudent(student), HttpStatus.CREATED);
+        return ResponseEntity.ok(StudentApiModelMapper.getStudentResponseFromStudent(student));
     }
 }

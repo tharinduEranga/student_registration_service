@@ -3,9 +3,11 @@ package com.skiply.student.registration.student.service;
 import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
 import com.skiply.student.registration.common.model.exception.TransientFailure;
+import com.skiply.student.registration.common.model.id.PaymentId;
 import com.skiply.student.registration.student.api.client.PaymentServiceClient;
 import com.skiply.student.registration.student.api.client.model.PaymentInitiateRequest;
 import com.skiply.student.registration.student.mapper.StudentRepositoryModelMapper;
+import com.skiply.student.registration.student.model.StudentCreatedData;
 import com.skiply.student.registration.student.repository.StudentRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Service
 public class StudentCreator {
@@ -29,13 +32,14 @@ public class StudentCreator {
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentCreator.class);
 
     @Transactional(propagation = Propagation.REQUIRED)
-    public Student execute(Student student) {
+    public StudentCreatedData execute(Student student) {
         try {
             checkMobileNumber(student.mobile());
             var studentRecord = StudentRepositoryModelMapper.getStudentDataRecord(student);
             studentRecord = studentRepository.save(studentRecord);
-            initiatePayment(student);
-            return StudentRepositoryModelMapper.getStudentFromDataRecord(studentRecord);
+            final var paymentId = initiatePayment(student);
+            student = StudentRepositoryModelMapper.getStudentFromDataRecord(studentRecord);
+            return new StudentCreatedData(student, paymentId);
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
@@ -61,13 +65,17 @@ public class StudentCreator {
                 .build();
     }
 
-    private void initiatePayment(Student student) {
+    private PaymentId initiatePayment(Student student) {
         var paymentResponse = paymentServiceClient
                 .initiatePayment(getPaymentInitiateRequest(student));
         if (!paymentResponse.getStatusCode().is2xxSuccessful()) {
             throw new TransientFailure("Error initiating the payment for student: " + student.id().value());
         }
         LOGGER.info("Payment initiation successful for student: {}", student.id().value());
+        if (Objects.isNull(paymentResponse.getBody()) || Objects.isNull(paymentResponse.getBody().id())) {
+            throw new TransientFailure("No payment id in the response!");
+        }
+        return PaymentId.of(paymentResponse.getBody().id());
     }
 
 }
