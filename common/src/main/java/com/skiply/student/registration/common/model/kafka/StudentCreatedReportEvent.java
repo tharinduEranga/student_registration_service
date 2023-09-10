@@ -1,21 +1,17 @@
 package com.skiply.student.registration.common.model.kafka;
 
 import com.skiply.student.registration.common.model.Student;
-import com.skiply.student.registration.common.model.id.PaymentId;
 import jakarta.annotation.Nonnull;
 
 import java.util.Objects;
 
-public record StudentDataUpdateReportEvent(
+public record StudentCreatedReportEvent(
 
-        @Nonnull
-        PaymentId paymentId,
         @Nonnull
         Student student
 ) {
 
-    public StudentDataUpdateReportEvent {
-        Objects.requireNonNull(paymentId, "paymentId cannot be null");
+    public StudentCreatedReportEvent {
         Objects.requireNonNull(student, "student cannot be null");
     }
 
@@ -24,21 +20,15 @@ public record StudentDataUpdateReportEvent(
     }
 
     public static class Builder {
-        private PaymentId paymentId;
         private Student student;
-
-        public Builder paymentId(PaymentId paymentId) {
-            this.paymentId = paymentId;
-            return this;
-        }
 
         public Builder student(Student student) {
             this.student = student;
             return this;
         }
 
-        public StudentDataUpdateReportEvent build() {
-            return new StudentDataUpdateReportEvent(paymentId, student);
+        public StudentCreatedReportEvent build() {
+            return new StudentCreatedReportEvent(student);
         }
     }
 }

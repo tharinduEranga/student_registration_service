@@ -16,10 +16,10 @@ public class ReportRecord {
     @Column(name = "id", length = 200)
     private String id;
 
-    @Column(name = "amount", precision = 10, scale = 2, nullable = false)
+    @Column(name = "amount", precision = 10, scale = 2)
     private BigDecimal amount;
 
-    @Column(name = "currency", length = 10, nullable = false)
+    @Column(name = "currency", length = 10)
     private String currency;
 
     @Column(name = "student_registration_id", length = 200, nullable = false)
@@ -28,16 +28,16 @@ public class ReportRecord {
     @Column(name = "student_name", length = 200)
     private String studentName;
 
-    @Column(name = "payment_id", length = 255, nullable = false)
+    @Column(name = "payment_id", length = 255)
     private String paymentId;
 
     @Column(name = "datetime", nullable = false)
     private OffsetDateTime datetime;
 
-    @Column(name = "masked_card_no", length = 255, nullable = false)
+    @Column(name = "masked_card_no", length = 255)
     private String maskedCardNo;
 
-    @Column(name = "card_type", length = 25, nullable = false)
+    @Column(name = "card_type", length = 25)
     private String cardType;
 
     public ReportRecord() {

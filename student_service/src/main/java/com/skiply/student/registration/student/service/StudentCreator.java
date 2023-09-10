@@ -4,8 +4,10 @@ import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
 import com.skiply.student.registration.common.model.exception.TransientFailure;
 import com.skiply.student.registration.common.model.id.PaymentId;
+import com.skiply.student.registration.common.model.kafka.StudentCreatedReportEvent;
 import com.skiply.student.registration.student.api.client.PaymentServiceClient;
 import com.skiply.student.registration.student.api.client.model.PaymentInitiateRequest;
+import com.skiply.student.registration.student.event.publisher.StudentCreateEventPublisher;
 import com.skiply.student.registration.student.mapper.StudentRepositoryModelMapper;
 import com.skiply.student.registration.student.model.StudentCreatedData;
 import com.skiply.student.registration.student.repository.StudentRepository;
@@ -23,10 +25,12 @@ public class StudentCreator {
 
     private final StudentRepository studentRepository;
     private final PaymentServiceClient paymentServiceClient;
+    private final StudentCreateEventPublisher studentCreateEventPublisher;
 
-    public StudentCreator(StudentRepository studentRepository, PaymentServiceClient paymentServiceClient) {
+    public StudentCreator(StudentRepository studentRepository, PaymentServiceClient paymentServiceClient, StudentCreateEventPublisher studentCreateEventPublisher) {
         this.studentRepository = studentRepository;
         this.paymentServiceClient = paymentServiceClient;
+        this.studentCreateEventPublisher = studentCreateEventPublisher;
     }
 
     private static final Logger LOGGER = LoggerFactory.getLogger(StudentCreator.class);
@@ -38,6 +42,7 @@ public class StudentCreator {
             var studentRecord = StudentRepositoryModelMapper.getStudentDataRecord(student);
             studentRecord = studentRepository.save(studentRecord);
             final var paymentId = initiatePayment(student);
+            publishStudentCreatedEvent(student);
             student = StudentRepositoryModelMapper.getStudentFromDataRecord(studentRecord);
             return new StudentCreatedData(student, paymentId);
         } catch (BusinessRuleViolationException e) {
@@ -76,6 +81,14 @@ public class StudentCreator {
             throw new TransientFailure("No payment id in the response!");
         }
         return PaymentId.of(paymentResponse.getBody().id());
+    }
+
+    private void publishStudentCreatedEvent(Student student) {
+        studentCreateEventPublisher.publish(
+                StudentCreatedReportEvent.builder()
+                        .student(student)
+                        .build()
+        );
     }
 
 }

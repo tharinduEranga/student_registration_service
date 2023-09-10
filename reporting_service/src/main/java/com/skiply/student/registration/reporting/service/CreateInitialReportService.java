@@ -3,32 +3,35 @@ package com.skiply.student.registration.reporting.service;
 import com.skiply.student.registration.common.model.Student;
 import com.skiply.student.registration.common.model.exception.BusinessRuleViolationException;
 import com.skiply.student.registration.common.model.exception.TransientFailure;
-import com.skiply.student.registration.common.model.id.PaymentId;
 import com.skiply.student.registration.reporting.repository.ReportRepository;
+import com.skiply.student.registration.reporting.repository.data.ReportRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.OffsetDateTime;
+import java.util.UUID;
+
 @Service
-public class UpdateStudentDataService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(UpdateStudentDataService.class);
+public class CreateInitialReportService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CreateInitialReportService.class);
 
     private final ReportRepository reportRepository;
 
-    public UpdateStudentDataService(ReportRepository reportRepository) {
+    public CreateInitialReportService(ReportRepository reportRepository) {
         this.reportRepository = reportRepository;
     }
 
     @Transactional
-    public void execute(PaymentId paymentId, Student student) {
+    public void execute(Student student) {
         try {
-            final var reportRecord = reportRepository.findByPaymentId(paymentId.value())
-                    .stream()
-                    .findFirst()
-                    .orElseThrow(() -> new BusinessRuleViolationException("No report found for the student: %s"
-                            .formatted(student.id().value())));
-            reportRecord.setStudentName(student.name());
+            final var reportRecord = ReportRecord.builder()
+                    .id(UUID.randomUUID().toString())
+                    .studentRegistrationId(student.id().value())
+                    .studentName(student.name())
+                    .datetime(OffsetDateTime.now())
+                    .build();
             reportRepository.save(reportRecord);
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
