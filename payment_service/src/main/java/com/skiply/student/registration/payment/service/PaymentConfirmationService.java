@@ -14,6 +14,7 @@ import org.javamoney.moneta.FastMoney;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class PaymentConfirmationService {
@@ -30,6 +31,7 @@ public class PaymentConfirmationService {
         this.paymentConfirmationReportEventPublisher = paymentConfirmationReportEventPublisher;
     }
 
+    @Transactional
     public String execute(PaymentConfirmation paymentConfirmation) {
         try {
             var paymentDataRecord = paymentRepository.findById(paymentConfirmation.id().value())
@@ -42,8 +44,6 @@ public class PaymentConfirmationService {
             publishEvents(paymentConfirmation, paymentDataRecord);
 
             return paymentDataRecord.getId();
-
-            //TODO: send the information to the reporting service as a payment confirmation success event
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {

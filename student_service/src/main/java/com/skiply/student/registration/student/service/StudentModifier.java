@@ -36,8 +36,8 @@ public class StudentModifier {
         } catch (BusinessRuleViolationException e) {
             throw e; //explicitly catch because the error needs to be distinguished from other errors
         } catch (Exception e) {
-            LOGGER.error("[StudentCreator] failed to save student: {}", e.getMessage(), e);
-            throw new BusinessRuleViolationException("Failed to save student: %s".formatted(e.getMessage()), e);
+            LOGGER.error("[StudentModifier] failed to update student: {}", e.getMessage(), e);
+            throw new BusinessRuleViolationException("Failed to update student: %s".formatted(e.getMessage()), e);
         }
     }
 

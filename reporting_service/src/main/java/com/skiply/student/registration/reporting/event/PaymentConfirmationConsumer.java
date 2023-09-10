@@ -19,7 +19,7 @@ public class PaymentConfirmationConsumer {
         this.createReportService = createReportService;
     }
 
-    @KafkaListener(topics = "payment-confirmed-report", groupId = "com.skiply.student.registration.student")
+    @KafkaListener(topics = "payment-confirmed-report", groupId = "com.skiply.student.registration.report")
     public void consume(PaymentConfirmationReportEvent event) {
         try {
             LOGGER.info("Payment confirmation report consumed Kafka message -> {}", event);

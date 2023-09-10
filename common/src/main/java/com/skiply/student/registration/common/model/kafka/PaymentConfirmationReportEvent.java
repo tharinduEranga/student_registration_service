@@ -6,7 +6,6 @@ import com.skiply.student.registration.common.model.id.ReportId;
 import com.skiply.student.registration.common.model.id.StudentId;
 import jakarta.annotation.Nonnull;
 
-import javax.money.MonetaryAmount;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.Objects;
